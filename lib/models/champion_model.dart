@@ -1,5 +1,3 @@
-import 'package:http/http.dart' as http;
-
 class ChampionModel {
   final Map<String, Champion> data;
   final String version;

@@ -5,6 +5,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:state_management/app_colors.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:state_management/models/champion_model.dart';
+import 'package:state_management/champion_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Champion> searchResults = [];
 
   final TextEditingController _searchController = TextEditingController();
+  String _currentDDragonVersion = '14.13.1';
 
   @override
   void initState() {
@@ -69,6 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
         List<dynamic> versions = json.decode(versionResponse.body);
         if (versions.isNotEmpty) {
           currentVersion = versions[0];
+          setState(() {
+            _currentDDragonVersion = currentVersion;
+          });
         }
       }
     } catch (e) {
@@ -167,6 +172,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         champion.splashImageUrl,
                         champion.name,
                         champion.blurb,
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChampionDetailScreen(
+                                championId: champion.id,
+                                version: _currentDDragonVersion,
+                              ),
+                            ),
+                          );
+                        },
                       );
                     }
                   },
@@ -179,55 +195,69 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _containerProduce(String _imageUrl, String _name, String _detail) {
+  Widget _containerProduce(
+    String _imageUrl,
+    String _name,
+    String _detail,
+    Function _onTap,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(top: 4, bottom: 8),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                _imageUrl,
-                height: 150,
-                width: 100,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _name,
-                      style: const TextStyle(
-                        color: AppColors.blackColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _detail,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.blackColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+      child: InkWell(
+        onTap: () {
+          _onTap();
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  _imageUrl,
+                  height: 150,
+                  width: 100,
+                  fit: BoxFit.cover,
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 8.0,
+                    right: 8.0,
+                    top: 8.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _name,
+                        style: const TextStyle(
+                          color: AppColors.blackColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _detail,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.blackColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
