@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:state_management/app_colors.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:state_management/setstate/app_colors.dart';
 import 'package:state_management/models/champion_model.dart';
-import 'package:state_management/champion_detail_screen.dart';
+import 'package:state_management/ui/setstate/champion_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:state_management/app_assets.dart';
-import 'package:state_management/app_colors.dart';
-import 'package:state_management/api_service.dart';
+import 'package:state_management/setstate/app_assets.dart';
+import 'package:state_management/setstate/app_colors.dart';
+import 'package:state_management/services/api_service.dart';
 import 'package:state_management/models/champion_detail_model.dart';
 
 class ChampionDetailScreen extends StatefulWidget {
